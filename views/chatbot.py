@@ -7,8 +7,8 @@ from email.mime.multipart import MIMEMultipart
 
 def send_email(to_email, subject, body):
     """Send an email using SMTP."""
-    from_email = "your_email@gmail.com"  # Replace with your Gmail address
-    app_password = "your_app_password"  # Replace with your Gmail app password
+    from_email = "sallahdaniel0@gmail.com"  # Your Gmail address
+    app_password = "qtid tmbi qmod tgam"  # Your Gmail app password
 
     try:
         # Create the email
@@ -95,53 +95,59 @@ def app():
         </div>
     """, unsafe_allow_html=True)
 
+    # Initialize session state for input fields
+    if "form_submitted" not in st.session_state:
+        st.session_state.form_submitted = False
+
     # Contact Form
     st.markdown('<div class="contact-form">', unsafe_allow_html=True)
     st.markdown('<h2>Get in Touch</h2>', unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     with col1:
-        first_name = st.text_input("First Name")
+        first_name = st.text_input("First Name", key="first_name" if not st.session_state.form_submitted else "")
     with col2:
-        last_name = st.text_input("Last Name")
+        last_name = st.text_input("Last Name", key="last_name" if not st.session_state.form_submitted else "")
 
-    email = st.text_input("Email Address")
-    phone = st.text_input("Phone Number")
-    message = st.text_area("Message", height=150)
+    email = st.text_input("Email Address", key="email" if not st.session_state.form_submitted else "")
+    phone = st.text_input("Phone Number", key="phone" if not st.session_state.form_submitted else "")
+    message = st.text_area("Message", height=150, key="message" if not st.session_state.form_submitted else "")
 
     if st.button("Submit"):
         if first_name and last_name and email and phone and message:
-            # Send the email to yourself
-            to_admin = "sallahdaniel0@gmail.com"  # Your email address
-            subject_admin = f"New Message from {first_name} {last_name}"
-            body_admin = f"""
-            You have received a new message via the Customer Service page:
+            with st.spinner("Sending your message..."):
+                # Send the email to yourself
+                to_admin = "sallahdaniel0@gmail.com"  # Your email address
+                subject_admin = f"New Message from {first_name} {last_name}"
+                body_admin = f"""
+                You have received a new message via the Customer Service page:
 
-            Name: {first_name} {last_name}
-            Email: {email}
-            Phone: {phone}
+                Name: {first_name} {last_name}
+                Email: {email}
+                Phone: {phone}
 
-            Message:
-            {message}
-            """
-            admin_email_sent = send_email(to_admin, subject_admin, body_admin)
+                Message:
+                {message}
+                """
+                admin_email_sent = send_email(to_admin, subject_admin, body_admin)
 
-            # Send acknowledgment email to the user
-            subject_user = "Acknowledgment: Message Received"
-            body_user = f"""
-            Dear {first_name},
+                # Send acknowledgment email to the user
+                subject_user = "Acknowledgment: Message Received"
+                body_user = f"""
+                Dear {first_name},
 
-            Thank you for reaching out! I have received your message and will get back to you shortly.
+                Thank you for reaching out! I have received your message and will get back to you shortly.
 
-            Best regards,
-            Daniel Sallah
-            """
-            user_email_sent = send_email(email, subject_user, body_user)
+                Best regards,
+                Daniel Sallah
+                """
+                user_email_sent = send_email(email, subject_user, body_user)
 
-            if admin_email_sent and user_email_sent:
-                st.success("Your message has been sent successfully! Check your email for acknowledgment.")
-            else:
-                st.error("There was an issue sending your message. Please try again.")
+                if admin_email_sent and user_email_sent:
+                    st.success("Your message has been sent successfully! Check your email for acknowledgment.")
+                    st.session_state.form_submitted = True
+                else:
+                    st.error("There was an issue sending your message. Please try again.")
         else:
             st.warning("Please fill in all fields before submitting.")
 
