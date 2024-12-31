@@ -3,66 +3,69 @@ import base64
 import os
 
 def work_experience():
-    # Set path to the background image
-    background_image_path = r"C:\Users\USER\OneDrive\Desktop\stra\media\image2.jpg"
+    # Set the relative path to the background image
+    background_image_path = os.path.join("media", "image2.jpg")
 
-    # Read and embed the background image using CSS
-    with open(background_image_path, "rb") as bg_file:
-        bg_image_data = bg_file.read()
-        bg_image_url = f"data:image/jpeg;base64,{base64.b64encode(bg_image_data).decode()}"
+    try:
+        # Read and embed the background image using CSS
+        with open(background_image_path, "rb") as bg_file:
+            bg_image_data = bg_file.read()
+            bg_image_url = f"data:image/jpeg;base64,{base64.b64encode(bg_image_data).decode()}"
 
-    # Apply CSS for styling
-    st.markdown(f"""
-        <style>
-        .stApp {{
-            background: url("{bg_image_url}");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }}
-        .section-container {{
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            color: black;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }}
-        .job-title {{
-            color: #2c3e50;
-            font-weight: bold;
-        }}
-        .job-company {{
-            color: #34495e;
-            font-style: italic;
-        }}
-        .certification-tab {{
-            margin-bottom: 25px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-            display: flex;
-            align-items: center;
-        }}
-        .certification-tab:hover {{
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-            background-color: #f0f8ff;
-        }}
-        .certification-icon {{
-            font-size: 30px;
-            margin-right: 15px;
-            color: #2196F3;
-        }}
-        .certification-name {{
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }}
-        </style>
-    """, unsafe_allow_html=True)
+        # Apply CSS for styling
+        st.markdown(f"""
+            <style>
+            .stApp {{
+                background: url("{bg_image_url}");
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }}
+            .section-container {{
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 10px;
+                padding: 20px;
+                margin-bottom: 20px;
+                color: black;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }}
+            .job-title {{
+                color: #2c3e50;
+                font-weight: bold;
+            }}
+            .job-company {{
+                color: #34495e;
+                font-style: italic;
+            }}
+            .certification-tab {{
+                margin-bottom: 25px;
+                padding: 20px;
+                background-color: #f9f9f9;
+                border-radius: 10px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+                display: flex;
+                align-items: center;
+            }}
+            .certification-tab:hover {{
+                transform: translateY(-5px);
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+                background-color: #f0f8ff;
+            }}
+            .certification-icon {{
+                font-size: 30px;
+                margin-right: 15px;
+                color: #2196F3;
+            }}
+            .certification-name {{
+                font-size: 18px;
+                font-weight: bold;
+                color: #333;
+            }}
+            </style>
+        """, unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.error("Background image not found. Please check the media directory.")
 
     # Title for Professional Experience
     st.title("💼 Professional Experience")
