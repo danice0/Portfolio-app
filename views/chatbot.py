@@ -30,11 +30,16 @@ def send_email(to_email, subject, body):
         return False
 
 def app():
-    # Set up the background image
-    background_image_path = r"C:\Users\USER\OneDrive\Desktop\stra\media\CONTACT.jpg"
-    with open(background_image_path, "rb") as bg_file:
-        bg_image_data = bg_file.read()
-        bg_image_url = f"data:image/jpeg;base64,{base64.b64encode(bg_image_data).decode()}"
+    # Use a relative path for the background image (ensure the image is within your app's directory)
+    background_image_path = "media/CONTACT.jpg"  # Make sure this image is in the media folder within your app's directory
+    
+    if os.path.exists(background_image_path):  # Check if the file exists
+        with open(background_image_path, "rb") as bg_file:
+            bg_image_data = bg_file.read()
+            bg_image_url = f"data:image/jpeg;base64,{base64.b64encode(bg_image_data).decode()}"
+    else:
+        st.error("Background image not found. Please make sure the image is in the correct directory.")
+        return
 
     # Apply CSS styles
     st.markdown(f"""

@@ -5,9 +5,10 @@ from pathlib import Path
 def app():
     """Main function for the projects page."""
 
-    # Serve the local image
-    background_path = Path("C:/Users/USER/OneDrive/Desktop/stra/media/EEE.jpg")
-    if background_path.exists():
+    # Use a relative path for the background image
+    background_path = Path("media/EEE.jpg")  # Place your image in a "media" folder within your app's directory
+    
+    if background_path.exists():  # Check if the file exists
         with open(background_path, "rb") as image_file:
             encoded_image = base64.b64encode(image_file.read()).decode()
 
@@ -15,7 +16,7 @@ def app():
         st.markdown(f"""
         <style>
             .stApp {{
-                background-image: url("data:image/jpg;base64,{encoded_image}");
+                background-image: url("data:image/jpg;base64,{encoded_image}"); 
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
