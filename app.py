@@ -17,10 +17,28 @@ PAGES = {
     "Chatbot/Contact Me": chatbot,
 }
 
-def main():
-    # Initialize session state for selected page
+# Function to initialize the session state
+def initialize_session_state():
     if "selected_page" not in st.session_state:
         st.session_state.selected_page = "About Me"  # Default page
+    if "pages_loaded" not in st.session_state:
+        st.session_state.pages_loaded = {}  # Track loaded pages
+
+# Lazy load function for pages
+def load_page(page_name):
+    # Check if the page is already loaded, if not, load it
+    if page_name not in st.session_state.pages_loaded:
+        page_module = PAGES.get(page_name)
+        if page_module:
+            # Only run the page's `app` function if it's not cached yet
+            page_module.app()
+            st.session_state.pages_loaded[page_name] = True
+        else:
+            st.error("Page not found. Defaulting to About Me.")
+            about_me.app()
+
+def main():
+    initialize_session_state()
 
     # Responsive Navbar
     st.markdown('<div class="navbar">', unsafe_allow_html=True)
@@ -33,12 +51,7 @@ def main():
     st.markdown('</div>', unsafe_allow_html=True)
 
     # Load the selected page
-    page_module = PAGES.get(st.session_state.selected_page)
-    if page_module:
-        page_module.app()
-    else:
-        st.error("Page not found. Defaulting to About Me.")
-        about_me.app()
+    load_page(st.session_state.selected_page)
 
 if __name__ == "__main__":
     main()
